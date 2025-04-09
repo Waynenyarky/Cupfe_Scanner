@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.MediaPlayer
 import android.widget.Toast
 import androidx.annotation.OptIn
 import androidx.camera.core.CameraSelector
@@ -25,11 +26,12 @@ import android.util.Base64
 
 class MainActivity : AppCompatActivity() {
     private val cameraExecutor = Executors.newSingleThreadExecutor()
-    private val expectedBaseUrl = "http://192.168.20.209/expresso-cafe/api/stripePayment/payment_form_order.php"
+    private val expectedBaseUrl = "http://192.168.1.5/expresso-cafe/api/stripePayment/payment_form_order.php"
     private val expectedToken = "ABC123SECRET"
 
-    // ✅ Prevents multiple QR reads
+    // ✅ Prevents multiple QR reads (Resets after 3 seconds)
     private var hasScanned = false
+    private var mediaPlayer: MediaPlayer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -104,10 +106,14 @@ class MainActivity : AppCompatActivity() {
                                     if (!hasScanned) {
                                         hasScanned = true
                                         Toast.makeText(this, "✅ Valid QR Code!", Toast.LENGTH_SHORT).show()
+                                        playSuccessSound()
 
                                         val intent = Intent(Intent.ACTION_VIEW)
                                         intent.data = android.net.Uri.parse(decodedUrl)
                                         startActivity(intent)
+
+                                        // Reset scan state after a delay to allow another scan
+                                        resetScanStateAfterDelay()
                                     }
                                 } else {
                                     Toast.makeText(this, "❌ Invalid or missing token", Toast.LENGTH_SHORT).show()
@@ -129,7 +135,20 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Play success sound when a QR code is scanned
+    private fun playSuccessSound() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.scanned_sound) // Make sure qr_scan_success.mp3 is in res/raw
+        }
+        mediaPlayer?.start()
+    }
 
+    // Reset the scan state after 3 seconds, allowing another scan
+    private fun resetScanStateAfterDelay() {
+        android.os.Handler(mainLooper).postDelayed({
+            hasScanned = false
+        }, 3000) // Delay of 3 seconds before allowing another scan
+    }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -143,5 +162,6 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         cameraExecutor.shutdown()
+        mediaPlayer?.release()
     }
 }

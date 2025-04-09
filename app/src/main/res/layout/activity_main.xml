@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <!-- Camera preview -->
     <androidx.camera.view.PreviewView
         android:id="@+id/previewView"
         android:layout_width="0dp"
@@ -15,4 +16,82 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
+
+    <com.enrique_john_wayne_m.cupfe_scanner.ScannerOverlayView
+        android:id="@+id/overlayView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Scan box with only corners -->
+    <FrameLayout
+        android:id="@+id/scanBox"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Top-left corner -->
+        <View
+            android:layout_width="30dp"
+            android:layout_height="5dp"
+            android:layout_gravity="top|start"
+            android:layout_margin="2dp"
+            android:background="#C67C4E"/>
+        <View
+            android:layout_width="5dp"
+            android:layout_height="30dp"
+            android:layout_gravity="top|start"
+            android:layout_margin="2dp"
+            android:background="#C67C4E"/>
+
+        <!-- Top-right corner -->
+        <View
+            android:layout_width="30dp"
+            android:layout_height="5dp"
+            android:layout_gravity="top|end"
+            android:layout_margin="2dp"
+            android:background="#C67C4E"/>
+        <View
+            android:layout_width="5dp"
+            android:layout_height="30dp"
+            android:layout_gravity="top|end"
+            android:layout_margin="2dp"
+            android:background="#C67C4E"/>
+
+        <!-- Bottom-left corner -->
+        <View
+            android:layout_width="30dp"
+            android:layout_height="5dp"
+            android:layout_gravity="bottom|start"
+            android:layout_margin="2dp"
+            android:background="#C67C4E"/>
+        <View
+            android:layout_width="5dp"
+            android:layout_height="30dp"
+            android:layout_gravity="bottom|start"
+            android:layout_margin="2dp"
+            android:background="#C67C4E"/>
+
+        <!-- Bottom-right corner -->
+        <View
+            android:layout_width="30dp"
+            android:layout_height="5dp"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="2dp"
+            android:background="#C67C4E"/>
+        <View
+            android:layout_width="5dp"
+            android:layout_height="30dp"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="2dp"
+            android:background="#C67C4E"/>
+
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
